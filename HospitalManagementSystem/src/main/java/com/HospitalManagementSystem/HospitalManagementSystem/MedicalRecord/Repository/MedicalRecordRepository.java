@@ -4,7 +4,9 @@ import com.HospitalManagementSystem.HospitalManagementSystem.MedicalRecord.Model
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface MedicalRecordRepository extends MongoRepository<MedicalRecord, String> {
-    // You can define additional custom query methods here if needed
+    List<MedicalRecord> findByUserId(String userId);
 }
