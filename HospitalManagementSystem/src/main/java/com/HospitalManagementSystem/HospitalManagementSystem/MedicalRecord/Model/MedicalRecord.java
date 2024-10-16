@@ -14,6 +14,7 @@ public class MedicalRecord {
     @Id
     private String id;
 
+    private String userId;
     private String patientId;
     private String firstName;
     private String lastName;
@@ -25,5 +26,7 @@ public class MedicalRecord {
     private List<String> ongoingMedications;
     private String emergencyContactName;
     private String emergencyContactNumber;
+
+    private List<Treatments> treatments;
 
 }
