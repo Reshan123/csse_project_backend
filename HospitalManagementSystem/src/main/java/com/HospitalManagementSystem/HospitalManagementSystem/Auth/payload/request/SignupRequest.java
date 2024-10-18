@@ -3,7 +3,9 @@ package com.HospitalManagementSystem.HospitalManagementSystem.Auth.payload.reque
 import java.util.Set;
 
 import jakarta.validation.constraints.*;
- 
+import lombok.Data;
+
+@Data
 public class SignupRequest {
     @NotBlank
     @Size(min = 5, max = 50)
@@ -19,6 +21,8 @@ public class SignupRequest {
     @NotBlank
     @Size(min = 6, max = 40)
     private String password;
+
+    private String department;
   
     public String getUsername() {
         return username;

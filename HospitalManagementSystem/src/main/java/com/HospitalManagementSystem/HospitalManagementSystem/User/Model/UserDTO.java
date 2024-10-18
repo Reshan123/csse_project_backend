@@ -1,5 +1,8 @@
 package com.HospitalManagementSystem.HospitalManagementSystem.User.Model;
 
+import lombok.Data;
+
+@Data
 public class UserDTO {
 
     private String id;

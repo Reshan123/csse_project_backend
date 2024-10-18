@@ -1,5 +1,6 @@
 package com.HospitalManagementSystem.HospitalManagementSystem.User.Controller;
 
+import com.HospitalManagementSystem.HospitalManagementSystem.Auth.models.User;
 import com.HospitalManagementSystem.HospitalManagementSystem.User.Model.PatientDTO;
 import com.HospitalManagementSystem.HospitalManagementSystem.User.Model.UserDTO;
 import com.HospitalManagementSystem.HospitalManagementSystem.User.Service.UserService;
@@ -7,8 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/user")
+@CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
 
     @Autowired
@@ -16,8 +20,14 @@ public class UserController {
 
     // Get Patient Details with Medical Record by ID
     @GetMapping("patientdetails/{id}")
-    public ResponseEntity<UserDTO> getPatientById(@PathVariable String id) {
-        UserDTO patientDTO = userService.getPatientById(id);
+    public ResponseEntity<PatientDTO> getPatientById(@PathVariable String id) {
+        PatientDTO patientDTO = userService.getPatientById(id);
+        System.out.println(patientDTO.getMedicalrecord());
         return ResponseEntity.ok(patientDTO);
+    }
+    @GetMapping("all")
+    public ResponseEntity<List<User>> getAllPatients() {
+
+        return ResponseEntity.ok(userService.getPatients());
     }
 }

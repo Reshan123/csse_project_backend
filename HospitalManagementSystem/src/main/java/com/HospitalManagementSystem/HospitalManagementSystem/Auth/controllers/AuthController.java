@@ -9,6 +9,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.HospitalManagementSystem.HospitalManagementSystem.Auth.models.Doctor;
 import com.HospitalManagementSystem.HospitalManagementSystem.Auth.models.ERole;
 import com.HospitalManagementSystem.HospitalManagementSystem.Auth.models.Role;
 import com.HospitalManagementSystem.HospitalManagementSystem.Auth.models.User;
@@ -205,13 +206,22 @@ public class AuthController {
 		// Generate random password
 		String rawPassword = generateRandomPassword();
 
-		// Create new user's account with the generated password
-		User user = new User(signUpRequest.getUsername(),
-				signUpRequest.getEmail(),
-				encoder.encode(rawPassword));
+
 
 		Set<String> strRoles = signUpRequest.getRoles();
 		Set<Role> roles = new HashSet<>();
+
+		User user;
+		if (strRoles.contains("mod")) {
+			 user = new Doctor(signUpRequest.getUsername(),
+					signUpRequest.getEmail(),
+					encoder.encode(rawPassword), signUpRequest.getDepartment());
+		}
+		else {
+			 user = new User(signUpRequest.getUsername(),
+					signUpRequest.getEmail(),
+					encoder.encode(rawPassword));
+		}
 
 		if (strRoles == null) {
 			Role userRole = roleRepository.findByName(ERole.ROLE_USER)
@@ -245,6 +255,82 @@ public class AuthController {
 
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}
+
+
+	@PutMapping("/updatepatient/{id}")
+	public ResponseEntity<?> updatePatient(@PathVariable String id, @Valid @RequestBody SignupRequest signUpRequest) throws IOException, MessagingException {
+		// Find the user by ID
+		User user = userRepository.findById(id)
+				.orElseThrow(() -> new RuntimeException("Error: User not found."));
+
+		// Check if the username is being updated and is already taken by another user
+		if (!user.getUsername().equals(signUpRequest.getUsername()) && userRepository.existsByUsername(signUpRequest.getUsername())) {
+			return ResponseEntity
+					.badRequest()
+					.body(new MessageResponse("Error: Username is already taken!"));
+		}
+
+		// Check if the email is being updated and is already in use by another user
+		if (!user.getEmail().equals(signUpRequest.getEmail()) && userRepository.existsByEmail(signUpRequest.getEmail())) {
+			return ResponseEntity
+					.badRequest()
+					.body(new MessageResponse("Error: Email is already in use!"));
+		}
+
+		// Update the user's details (username and email)
+		user.setUsername(signUpRequest.getUsername());
+		user.setEmail(signUpRequest.getEmail());
+
+		// Update roles
+		Set<String> strRoles = signUpRequest.getRoles();
+		Set<Role> roles = new HashSet<>();
+
+		if (strRoles == null) {
+			Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+					.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+			roles.add(userRole);
+		} else {
+			strRoles.forEach(role -> {
+				switch (role) {
+					case "admin":
+						Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+								.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+						roles.add(adminRole);
+						break;
+					case "mod":
+						Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
+								.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+						roles.add(modRole);
+						break;
+					default:
+						Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+								.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+						roles.add(userRole);
+				}
+			});
+		}
+
+		// Set the updated roles
+		user.setRoles(roles);
+
+		// If updating doctor details, check for department and update accordingly
+		if (user instanceof Doctor && signUpRequest.getDepartment() != null) {
+			((Doctor) user).setDepartment(signUpRequest.getDepartment());
+		}
+
+		// Save the updated user in the repository
+		User updatedUser = userRepository.save(user);
+
+		// Generate QR code for the updated user details (e.g., their unique ID)
+		ByteArrayOutputStream qrCodeOutputStream = generateQRCode(updatedUser.getId());
+
+		// Send an email with the updated user information (including the QR code)
+		String updatedInfo = "Your profile has been updated successfully.\n";
+		sendSignUpEmail(updatedUser.getEmail(), updatedInfo, qrCodeOutputStream);
+
+		return ResponseEntity.ok(new MessageResponse("User updated successfully!"));
+	}
+
 
 	// Function to generate random password
 	private String generateRandomPassword() {
