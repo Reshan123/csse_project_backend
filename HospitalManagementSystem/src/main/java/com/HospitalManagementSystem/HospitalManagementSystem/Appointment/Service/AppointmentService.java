@@ -10,6 +10,8 @@ public interface AppointmentService {
 
     Optional<Appointment> getAppointmentById(String id);
 
+    List<Appointment> getAllAppointmentsByPatientID(String id);
+
     Appointment addAppointment(Appointment appointment);
 
     Appointment updateAppointment(String id, Appointment appointmentDetails);

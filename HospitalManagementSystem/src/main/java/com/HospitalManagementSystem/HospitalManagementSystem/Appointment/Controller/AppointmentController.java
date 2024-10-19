@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/appointments")
+@CrossOrigin(origins = "http://localhost:5173")
 public class AppointmentController {
     @Autowired
     private AppointmentService appointmentService;
@@ -26,6 +27,11 @@ public class AppointmentController {
         Optional<Appointment> appointment = appointmentService.getAppointmentById(aptNo);
         return appointment.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
+    }
+
+    @GetMapping("/getByPatientID/{patientID}")
+    public List<Appointment> getAllAppointmentsByPatientID(@PathVariable String patientID) {
+        return appointmentService.getAllAppointmentsByPatientID(patientID);
     }
 
     @PostMapping("/addAppointment")

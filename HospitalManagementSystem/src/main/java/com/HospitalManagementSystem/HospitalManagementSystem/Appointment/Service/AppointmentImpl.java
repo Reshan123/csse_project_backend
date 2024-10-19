@@ -26,6 +26,11 @@ public class AppointmentImpl implements AppointmentService{
     }
 
     @Override
+    public List<Appointment> getAllAppointmentsByPatientID(String patientID) {
+        return appointmentRepo.findAllByPatientID(patientID);
+    }
+
+    @Override
     public Appointment addAppointment(Appointment appointment) {
         appointment.setCreatedAt(new Date());  // Set creation date
         appointment.setUpdatedAt(new Date());  // Set initial update date
