@@ -8,14 +8,15 @@ public class UserDTO {
     private String id;
     private String username;
     private String email;
-
+    private String link;
     public UserDTO() {
     }
 
-    public UserDTO(String id, String username, String email) {
+    public UserDTO(String id, String username, String email,String link) {
         this.id = id;
         this.username = username;
         this.email = email;
+        this.link = link;
     }
 
     public String getId() {

@@ -1,5 +1,8 @@
 package com.HospitalManagementSystem.HospitalManagementSystem.User.Service;
+import com.HospitalManagementSystem.HospitalManagementSystem.Auth.models.ERole;
+import com.HospitalManagementSystem.HospitalManagementSystem.Auth.models.Role;
 import com.HospitalManagementSystem.HospitalManagementSystem.Auth.models.User;
+import com.HospitalManagementSystem.HospitalManagementSystem.Auth.repository.RoleRepository;
 import com.HospitalManagementSystem.HospitalManagementSystem.Auth.repository.UserRepository;
 import com.HospitalManagementSystem.HospitalManagementSystem.MedicalRecord.Model.MedicalRecord;
 import com.HospitalManagementSystem.HospitalManagementSystem.MedicalRecord.Repository.MedicalRecordRepository;
@@ -20,6 +23,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private MedicalRecordRepository medicalRecordRepository;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
     @Override
     public PatientDTO getPatientById(String id) {
         // Fetch user by id
@@ -29,13 +35,19 @@ public class UserServiceImpl implements UserService {
         // Fetch medical record by user ID if available
         MedicalRecord medicalRecord = medicalRecordRepository.findById("670fac858934011bb2eb57aa").orElse(null);
         // Return PatientDTO including the medical record if present
-        return new PatientDTO(user.getId(), user.getUsername(), user.getEmail(),
+        return new PatientDTO(user.getId(), user.getUsername(), user.getEmail(),user.getLink(),
                 medicalRecord);
     }
 
-    @Override
-    public List<User> getPatients() {
 
-        return userRepository.findAll();
+    @Override
+    public List<User> findByRoles(Role role) {
+        // Assuming there is a 'ROLE_PATIENT' defined in your roles
+        Role patientRole = roleRepository.findByName(ERole.ROLE_USER)
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+
+        // Find all users who have the 'ROLE_PATIENT'
+        return userRepository.findByRoles(patientRole);
     }
+
 }

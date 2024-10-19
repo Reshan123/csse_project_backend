@@ -11,8 +11,8 @@ public class PatientDTO extends UserDTO {
     public PatientDTO() {
     }
 
-    public PatientDTO(String id, String username, String email, MedicalRecord medicalrecord) {
-        super(id, username, email);  // Inherit fields from UserDTO
+    public PatientDTO(String id, String username, String email,String link, MedicalRecord medicalrecord) {
+        super(id, username, email,link);  // Inherit fields from UserDTO
         this.medicalrecord = medicalrecord;
     }
 
