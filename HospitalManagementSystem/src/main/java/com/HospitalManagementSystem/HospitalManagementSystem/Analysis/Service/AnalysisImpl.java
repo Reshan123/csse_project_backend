@@ -78,6 +78,7 @@ public class AnalysisImpl implements AnalysisService {
 
             // Use patient's full name as the key
             String patientName = record.getFirstName() + " " + record.getLastName();
+            System.out.println(patientName + " " + treatmentCount);
             // If the patient name already exists, add the new treatment count to the existing one
             treatmentsPerPatient.put(patientName, treatmentsPerPatient.getOrDefault(patientName, 0) + treatmentCount);
         }
@@ -94,10 +95,12 @@ public class AnalysisImpl implements AnalysisService {
         for (MedicalRecord record : medicalRecords) {
             // Fetch treatments for the patient directly from the medical record
             List<Treatments> treatments = record.getTreatments();
+            System.out.println(record);
             int treatmentCount = treatments != null ? treatments.size() : 0;
 
             // Use gender as the key and update the count
             String gender = record.getGender().toLowerCase();
+
             treatmentsPerGender.put(gender, treatmentsPerGender.getOrDefault(gender, 0) + treatmentCount);
         }
 

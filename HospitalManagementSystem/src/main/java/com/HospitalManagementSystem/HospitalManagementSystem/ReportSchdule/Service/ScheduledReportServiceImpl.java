@@ -21,6 +21,7 @@ public class ScheduledReportServiceImpl implements ScheduledReportService {
         // Calculate nextSendDate based on frequency
         String nextSendDate = calculateNextSendDate(report.getFrequency());
         report.setNextSendDate(nextSendDate);
+        report.setEmailSent(false);
         return scheduledReportRepository.save(report);
     }
 
@@ -43,6 +44,19 @@ public class ScheduledReportServiceImpl implements ScheduledReportService {
             updatedReport.setFrequency(report.getFrequency());
             // Calculate nextSendDate based on the new frequency
             updatedReport.setNextSendDate(calculateNextSendDate(report.getFrequency()));
+            return scheduledReportRepository.save(updatedReport);
+        }
+        return null;
+    }
+
+    @Override
+    public ScheduledReport emailSent(String id) {
+        Optional<ScheduledReport> existingReport = scheduledReportRepository.findById(id);
+        if (existingReport.isPresent()) {
+            ScheduledReport updatedReport = existingReport.get();
+            updatedReport.setEmailSent(true);
+            String nextSendDate = calculateNextSendDate(updatedReport.getFrequency());
+            updatedReport.setNextSendDate(nextSendDate);
             return scheduledReportRepository.save(updatedReport);
         }
         return null;

@@ -10,5 +10,6 @@ public interface ScheduledReportService {
     Optional<ScheduledReport> getScheduledReportById(String id);
     List<ScheduledReport> getAllScheduledReports();
     ScheduledReport updateScheduledReport(String id, ScheduledReport report);
+    ScheduledReport emailSent(String id);
     void deleteScheduledReport(String id);
 }

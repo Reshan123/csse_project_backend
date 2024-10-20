@@ -43,6 +43,16 @@ public class ScheduledReportController {
         return ResponseEntity.notFound().build();
     }
 
+    @PutMapping("emailSent/{id}")
+    public ResponseEntity<ScheduledReport> updateEmailSent(@PathVariable String id) {
+        ScheduledReport updatedReport = scheduledReportService.emailSent(id);
+        if (updatedReport != null) {
+            return ResponseEntity.ok(updatedReport);
+        }
+        System.out.println("ScheduledReport with id {} not found" + id);
+        return ResponseEntity.notFound().build();
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReport(@PathVariable String id) {
         scheduledReportService.deleteScheduledReport(id);
