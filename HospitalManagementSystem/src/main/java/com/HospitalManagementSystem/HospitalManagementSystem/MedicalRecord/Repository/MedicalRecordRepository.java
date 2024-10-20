@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface MedicalRecordRepository extends MongoRepository<MedicalRecord, String> {
+
     MedicalRecord findByUserId(String userId);
 }
