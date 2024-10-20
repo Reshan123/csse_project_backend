@@ -1,10 +1,8 @@
 package com.HospitalManagementSystem.HospitalManagementSystem.User.Controller;
-
 import com.HospitalManagementSystem.HospitalManagementSystem.Auth.models.ERole;
 import com.HospitalManagementSystem.HospitalManagementSystem.Auth.models.Role;
 import com.HospitalManagementSystem.HospitalManagementSystem.Auth.models.User;
 import com.HospitalManagementSystem.HospitalManagementSystem.User.Model.PatientDTO;
-import com.HospitalManagementSystem.HospitalManagementSystem.User.Model.UserDTO;
 import com.HospitalManagementSystem.HospitalManagementSystem.User.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

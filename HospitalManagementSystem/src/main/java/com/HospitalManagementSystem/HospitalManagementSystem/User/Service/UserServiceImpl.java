@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         // Fetch medical record by user ID if available
-        MedicalRecord medicalRecord = medicalRecordRepository.findById("670fac858934011bb2eb57aa").orElse(null);
+        MedicalRecord medicalRecord = medicalRecordRepository.findByUserId(id);
         // Return PatientDTO including the medical record if present
         return new PatientDTO(user.getId(), user.getUsername(), user.getEmail(),user.getLink(),
                 medicalRecord);

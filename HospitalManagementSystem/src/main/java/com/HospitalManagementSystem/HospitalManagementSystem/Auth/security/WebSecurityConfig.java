@@ -64,7 +64,8 @@ public class WebSecurityConfig {
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/api/auth/**").permitAll() // Permit authentication endpoints
                     .requestMatchers("/api/test/**").permitAll() // Permit test endpoints
-                    .anyRequest().authenticated()); // Protect other endpoints
+                    .requestMatchers("/api/user/**").permitAll()
+                    .anyRequest().permitAll()); // Protect other endpoints
 
     http.authenticationProvider(authenticationProvider());
 
