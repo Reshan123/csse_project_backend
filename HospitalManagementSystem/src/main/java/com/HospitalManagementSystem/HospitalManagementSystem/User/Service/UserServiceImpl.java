@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findByRoles(Role role) {
         // Assuming there is a 'ROLE_PATIENT' defined in your roles
-        Role patientRole = roleRepository.findByName(ERole.ROLE_USER)
+        Role patientRole = roleRepository.findByName(role.getName())
                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 
         // Find all users who have the 'ROLE_PATIENT'
