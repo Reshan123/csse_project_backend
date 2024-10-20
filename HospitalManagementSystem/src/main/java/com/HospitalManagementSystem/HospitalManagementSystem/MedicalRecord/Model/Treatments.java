@@ -4,6 +4,8 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
+
 
 @Data
 public class Treatments {
@@ -16,4 +18,10 @@ public class Treatments {
     private String treatmentType;
     private String prescription;
     private String contactInfo;
+
+    public void setTreatmentDetails(String bloodPressureCheck) {
+    }
+
+    public void setDate(Date date) {
+    }
 }

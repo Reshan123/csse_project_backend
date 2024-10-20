@@ -46,4 +46,7 @@ public class MedicalRecord {
 
     private List<Treatments> treatments;
 
+    public MedicalRecord() {
+
+    }
 }

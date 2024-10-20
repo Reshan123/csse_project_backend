@@ -52,7 +52,7 @@ public class MedicalRecordController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteMedicalRecord(String id){
+    public ResponseEntity<Void> deleteMedicalRecord(@PathVariable String id){
         medicalRecordService.deleteRecord(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
