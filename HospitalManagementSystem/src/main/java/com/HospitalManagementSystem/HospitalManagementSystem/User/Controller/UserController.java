@@ -1,4 +1,5 @@
 package com.HospitalManagementSystem.HospitalManagementSystem.User.Controller;
+import com.HospitalManagementSystem.HospitalManagementSystem.Auth.models.Doctor;
 import com.HospitalManagementSystem.HospitalManagementSystem.Auth.models.ERole;
 import com.HospitalManagementSystem.HospitalManagementSystem.Auth.models.Role;
 import com.HospitalManagementSystem.HospitalManagementSystem.Auth.models.User;
@@ -31,8 +32,8 @@ public class UserController {
         return ResponseEntity.ok(userService.findByRoles(new Role(ERole.ROLE_USER)));
     }
     @GetMapping("doctors")
-    public ResponseEntity<List<User>> getAllDoctors() {
+    public ResponseEntity<List<Doctor>> getAllDoctors() {
 
-        return ResponseEntity.ok(userService.findByRoles(new Role(ERole.ROLE_MODERATOR)));
+        return ResponseEntity.ok(userService.findDoctors(new Role(ERole.ROLE_MODERATOR)));
     }
 }

@@ -1,5 +1,6 @@
 package com.HospitalManagementSystem.HospitalManagementSystem.User.Service;
 
+import com.HospitalManagementSystem.HospitalManagementSystem.Auth.models.Doctor;
 import com.HospitalManagementSystem.HospitalManagementSystem.Auth.models.Role;
 import com.HospitalManagementSystem.HospitalManagementSystem.Auth.models.User;
 import com.HospitalManagementSystem.HospitalManagementSystem.User.Model.PatientDTO;
@@ -11,4 +12,6 @@ public interface UserService {
     PatientDTO getPatientById(String id);
 
     List<User> findByRoles(Role role);
+
+    List<Doctor> findDoctors(Role role);
 }

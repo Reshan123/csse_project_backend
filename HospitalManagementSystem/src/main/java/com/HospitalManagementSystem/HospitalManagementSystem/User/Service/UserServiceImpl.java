@@ -1,4 +1,5 @@
 package com.HospitalManagementSystem.HospitalManagementSystem.User.Service;
+import com.HospitalManagementSystem.HospitalManagementSystem.Auth.models.Doctor;
 import com.HospitalManagementSystem.HospitalManagementSystem.Auth.models.ERole;
 import com.HospitalManagementSystem.HospitalManagementSystem.Auth.models.Role;
 import com.HospitalManagementSystem.HospitalManagementSystem.Auth.models.User;
@@ -42,12 +43,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findByRoles(Role role) {
-        // Assuming there is a 'ROLE_PATIENT' defined in your roles
-        Role patientRole = roleRepository.findByName(role.getName())
+        Role patientRole = roleRepository.findByName(ERole.ROLE_USER)
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+        return userRepository.findByRoles(patientRole);
+    }
+
+    @Override
+    public List<Doctor> findDoctors(Role role) {
+        Role patientRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
 
-        // Find all users who have the 'ROLE_PATIENT'
-        return userRepository.findByRoles(patientRole);
+        return userRepository.findDoctorsByRoles(patientRole);
     }
 
 }
