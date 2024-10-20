@@ -30,4 +30,9 @@ public class UserController {
 
         return ResponseEntity.ok(userService.findByRoles(new Role(ERole.ROLE_USER)));
     }
+    @GetMapping("doctors")
+    public ResponseEntity<List<User>> getAllDoctors() {
+
+        return ResponseEntity.ok(userService.findByRoles(new Role(ERole.ROLE_MODERATOR)));
+    }
 }
