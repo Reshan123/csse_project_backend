@@ -1,6 +1,6 @@
-package com.HospitalManagementSystem.HospitalManagementSystem.Analysis.Repository;
+package com.HospitalManagementSystem.HospitalManagementSystem.ReportScheduleTest.Repository;
 
-import com.HospitalManagementSystem.HospitalManagementSystem.Analysis.Model.Analysis;
+import com.HospitalManagementSystem.HospitalManagementSystem.ReportScheduleTest.Model.Analysis;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,7 @@
-package com.HospitalManagementSystem.HospitalManagementSystem.Analysis.Service;
+package com.HospitalManagementSystem.HospitalManagementSystem.ReportScheduleTest.Service;
 
-import com.HospitalManagementSystem.HospitalManagementSystem.Analysis.Model.Analysis;
-import com.HospitalManagementSystem.HospitalManagementSystem.Analysis.Repository.AnalysisRepository;
+import com.HospitalManagementSystem.HospitalManagementSystem.ReportScheduleTest.Model.Analysis;
+import com.HospitalManagementSystem.HospitalManagementSystem.ReportScheduleTest.Repository.AnalysisRepository;
 import com.HospitalManagementSystem.HospitalManagementSystem.Appointment.Model.Appointment;
 import com.HospitalManagementSystem.HospitalManagementSystem.Appointment.Service.AppointmentService;
 import com.HospitalManagementSystem.HospitalManagementSystem.MedicalRecord.Model.MedicalRecord;

@@ -1,4 +1,4 @@
-package com.HospitalManagementSystem.HospitalManagementSystem.Analysis.Model;
+package com.HospitalManagementSystem.HospitalManagementSystem.ReportScheduleTest.Model;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;

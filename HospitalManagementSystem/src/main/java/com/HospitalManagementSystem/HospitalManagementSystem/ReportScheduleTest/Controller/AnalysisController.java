@@ -1,16 +1,12 @@
-package com.HospitalManagementSystem.HospitalManagementSystem.Analysis.Controller;
+package com.HospitalManagementSystem.HospitalManagementSystem.ReportScheduleTest.Controller;
 
-import com.HospitalManagementSystem.HospitalManagementSystem.Analysis.Model.Analysis;
-import com.HospitalManagementSystem.HospitalManagementSystem.Analysis.Service.AnalysisService;
-import com.HospitalManagementSystem.HospitalManagementSystem.Appointment.Model.Appointment;
+import com.HospitalManagementSystem.HospitalManagementSystem.ReportScheduleTest.Model.Analysis;
+import com.HospitalManagementSystem.HospitalManagementSystem.ReportScheduleTest.Service.AnalysisService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/analysis")
