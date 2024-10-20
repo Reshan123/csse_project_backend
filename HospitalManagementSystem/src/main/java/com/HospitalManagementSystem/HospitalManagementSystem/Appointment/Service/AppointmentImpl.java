@@ -32,8 +32,8 @@ public class AppointmentImpl implements AppointmentService{
 
     @Override
     public Appointment addAppointment(Appointment appointment) {
-        appointment.setCreatedAt(new Date());  // Set creation date
-        appointment.setUpdatedAt(new Date());  // Set initial update date
+        appointment.setCreatedAt(new Date());
+        appointment.setUpdatedAt(new Date());
         return appointmentRepo.save(appointment);
     }
 
