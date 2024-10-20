@@ -58,7 +58,7 @@ public class MedicalRecordController {
     }
 
     @GetMapping("/getByUserId/{userId}")
-    public List<MedicalRecord> getRecordsByUserId(@PathVariable String userId) {
+    public MedicalRecord getRecordsByUserId(@PathVariable String userId) {
         return medicalRecordService.getMedicalRecordsByUserId(userId);
     }
 

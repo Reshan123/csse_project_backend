@@ -114,7 +114,7 @@ public class MedicalRecordImpl implements MedicalRecordService {
 
 
     @Override
-    public List<MedicalRecord> getMedicalRecordsByUserId(String userId) {
+    public MedicalRecord getMedicalRecordsByUserId(String userId) {
         return medicalRecordRepo.findByUserId(userId);
     }
 

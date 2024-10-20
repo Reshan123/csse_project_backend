@@ -30,13 +30,12 @@ public class UserDetailsImpl implements UserDetails {
 
 	private Collection<? extends GrantedAuthority> authorities;
 
-	public UserDetailsImpl(String id, String username, String email, String password,String role,
+	public UserDetailsImpl(String id, String username, String email, String password,
 			Collection<? extends GrantedAuthority> authorities) {
 		this.id = id;
 		this.username = username;
 		this.email = email;
 		this.password = password;
-		this.role = role;
 		this.authorities = authorities;
 	}
 
@@ -50,7 +49,6 @@ public class UserDetailsImpl implements UserDetails {
 				user.getUsername(), 
 				user.getEmail(),
 				user.getPassword(),
-				user.getRoles().stream().findFirst().map(role -> role.getName().name()).orElse(null),
 				authorities);
 	}
 
