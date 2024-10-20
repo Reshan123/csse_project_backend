@@ -52,8 +52,10 @@ public class UserServiceImpl implements UserService {
     public List<Doctor> findDoctors(Role role) {
         Role patientRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-
-        return userRepository.findDoctorsByRoles(patientRole);
+System.out.println(patientRole.getId()+ patientRole.getName()+"333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333");
+       List<Doctor> list = userRepository.findAllDoctors();
+       System.out.println(list.size()+"ssssssssssssssssssssssssssssssssssssss");
+       return list;
     }
 
 }

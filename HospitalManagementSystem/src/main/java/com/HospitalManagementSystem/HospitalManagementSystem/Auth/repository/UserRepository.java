@@ -19,6 +19,7 @@ public interface UserRepository extends MongoRepository<User, String> {
 
   List<User> findByRoles(Role patientRole);
 
-  @Query("{ '_class' : 'com.HospitalManagementSystem.HospitalManagementSystem.Auth.models.Doctor', 'roles' : ?0 }")
-  List<Doctor> findDoctorsByRoles(Role patientRole);
+  @Query("{ '_class': 'com.HospitalManagementSystem.HospitalManagementSystem.Auth.models.Doctor' }")
+  List<Doctor> findAllDoctors();
+
 }
