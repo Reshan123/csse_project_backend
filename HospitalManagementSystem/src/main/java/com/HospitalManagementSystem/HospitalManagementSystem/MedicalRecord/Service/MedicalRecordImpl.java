@@ -111,4 +111,11 @@ public class MedicalRecordImpl implements MedicalRecordService {
             throw new RuntimeException("Medical record not found with id: " + medicalRecordId);
         }
     }
+
+
+    @Override
+    public List<MedicalRecord> getMedicalRecordsByUserId(String userId) {
+        return medicalRecordRepo.findByUserId(userId);
+    }
+
 }

@@ -23,4 +23,7 @@ public interface MedicalRecordService {
     MedicalRecord updateTreatmentInMedicalRecord(String medicalRecordId, String treatmentId, Treatments treatmentDetails);
 
     MedicalRecord deleteTreatmentFromMedicalRecord(String medicalRecordId, String treatmentId);
+
+    List<MedicalRecord> getMedicalRecordsByUserId(String userId);
+
 }

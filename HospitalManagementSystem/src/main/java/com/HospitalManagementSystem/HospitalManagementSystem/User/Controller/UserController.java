@@ -1,5 +1,7 @@
 package com.HospitalManagementSystem.HospitalManagementSystem.User.Controller;
 
+import com.HospitalManagementSystem.HospitalManagementSystem.Auth.models.ERole;
+import com.HospitalManagementSystem.HospitalManagementSystem.Auth.models.Role;
 import com.HospitalManagementSystem.HospitalManagementSystem.Auth.models.User;
 import com.HospitalManagementSystem.HospitalManagementSystem.User.Model.PatientDTO;
 import com.HospitalManagementSystem.HospitalManagementSystem.User.Model.UserDTO;
@@ -28,6 +30,6 @@ public class UserController {
     @GetMapping("all")
     public ResponseEntity<List<User>> getAllPatients() {
 
-        return ResponseEntity.ok(userService.getPatients());
+        return ResponseEntity.ok(userService.findByRoles(new Role(ERole.ROLE_USER)));
     }
 }

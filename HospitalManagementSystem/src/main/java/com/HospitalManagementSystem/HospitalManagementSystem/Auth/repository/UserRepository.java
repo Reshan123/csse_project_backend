@@ -1,7 +1,9 @@
 package com.HospitalManagementSystem.HospitalManagementSystem.Auth.repository;
 
+import java.util.List;
 import java.util.Optional;
 
+import com.HospitalManagementSystem.HospitalManagementSystem.Auth.models.Role;
 import com.HospitalManagementSystem.HospitalManagementSystem.Auth.models.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
@@ -12,4 +14,6 @@ public interface UserRepository extends MongoRepository<User, String> {
   Boolean existsByUsername(String username);
 
   Boolean existsByEmail(String email);
+
+    List<User> findByRoles(Role patientRole);
 }

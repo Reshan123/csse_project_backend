@@ -15,7 +15,9 @@ public class SignupRequest {
     @Size(max = 50)
     @Email
     private String email;
-    
+
+    private String link;
+
     private Set<String> roles;
     
     @NotBlank
@@ -43,7 +45,7 @@ public class SignupRequest {
     public String getPassword() {
         return password;
     }
- 
+
     public void setPassword(String password) {
         this.password = password;
     }

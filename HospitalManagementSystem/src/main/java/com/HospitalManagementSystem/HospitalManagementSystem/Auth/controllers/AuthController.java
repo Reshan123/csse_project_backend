@@ -260,6 +260,7 @@ public class AuthController {
 	@PutMapping("/updatepatient/{id}")
 	public ResponseEntity<?> updatePatient(@PathVariable String id, @Valid @RequestBody SignupRequest signUpRequest) throws IOException, MessagingException {
 		// Find the user by ID
+		System.out.println(signUpRequest);
 		User user = userRepository.findById(id)
 				.orElseThrow(() -> new RuntimeException("Error: User not found."));
 
@@ -280,7 +281,8 @@ public class AuthController {
 		// Update the user's details (username and email)
 		user.setUsername(signUpRequest.getUsername());
 		user.setEmail(signUpRequest.getEmail());
-
+		user.setLink(signUpRequest.getLink());
+		user.setPassword(user.getPassword());
 		// Update roles
 		Set<String> strRoles = signUpRequest.getRoles();
 		Set<Role> roles = new HashSet<>();
@@ -311,7 +313,7 @@ public class AuthController {
 		}
 
 		// Set the updated roles
-		user.setRoles(roles);
+
 
 		// If updating doctor details, check for department and update accordingly
 		if (user instanceof Doctor && signUpRequest.getDepartment() != null) {

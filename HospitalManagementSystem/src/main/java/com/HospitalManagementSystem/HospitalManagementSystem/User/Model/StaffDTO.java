@@ -7,8 +7,8 @@ public class StaffDTO extends UserDTO {
     public StaffDTO() {
     }
 
-    public StaffDTO(String id, String username, String email, String position, String department) {
-        super(id, username, email);  // Inherit fields from UserDTO
+    public StaffDTO(String id, String username, String email,String link, String position, String department) {
+        super(id, username, email,link);  // Inherit fields from UserDTO
         this.position = position;
         this.department = department;
     }

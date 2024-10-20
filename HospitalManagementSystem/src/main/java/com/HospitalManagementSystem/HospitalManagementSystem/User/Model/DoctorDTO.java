@@ -8,8 +8,8 @@ public class DoctorDTO extends UserDTO {
     public DoctorDTO() {
     }
 
-    public DoctorDTO(String id, String username, String email, String specialization, String licenseNumber) {
-        super(id, username, email);
+    public DoctorDTO(String id, String username, String email,String link, String specialization, String licenseNumber) {
+        super(id, username, email,link);
         this.specialization = specialization;
         this.licenseNumber = licenseNumber;
     }

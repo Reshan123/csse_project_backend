@@ -57,6 +57,11 @@ public class MedicalRecordController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("/getByUserId/{userId}")
+    public List<MedicalRecord> getRecordsByUserId(@PathVariable String userId) {
+        return medicalRecordService.getMedicalRecordsByUserId(userId);
+    }
+
 
     // Add a treatment to a medical record
     @PostMapping("/{medicalRecordId}/addTreatment")
