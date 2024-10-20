@@ -22,6 +22,9 @@ import com.HospitalManagementSystem.HospitalManagementSystem.Auth.repository.Rol
 import com.HospitalManagementSystem.HospitalManagementSystem.Auth.repository.UserRepository;
 import com.HospitalManagementSystem.HospitalManagementSystem.Auth.security.jwt.JwtUtils;
 import com.HospitalManagementSystem.HospitalManagementSystem.Auth.security.services.UserDetailsImpl;
+import com.HospitalManagementSystem.HospitalManagementSystem.util.EmailUtil;
+import com.HospitalManagementSystem.HospitalManagementSystem.util.PasswordUtil;
+import com.HospitalManagementSystem.HospitalManagementSystem.util.QRCodeGenerator;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.encoder.ByteMatrix;
@@ -67,9 +70,13 @@ public class AuthController {
 	@Autowired
 	JwtUtils jwtUtils;
 
+	private final EmailUtil emailUtil;
 	@Autowired
-	JavaMailSender mailSender; // Autowire JavaMailSender
-
+	JavaMailSender mailSender;
+	public AuthController(JavaMailSender mailSender) {
+		this.mailSender = mailSender;
+		this.emailUtil = EmailUtil.getInstance(mailSender);
+	}
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 		Authentication authentication = authenticationManager.authenticate(
@@ -102,11 +109,12 @@ public class AuthController {
 
 		// Update user details
 		user.setUsername(updateRequest.getUsername());
+		QRCodeGenerator qrCodeGenerator = QRCodeGenerator.getInstance();
 
 		if (!updateRequest.getEmail().equals(oldEmail)) {
 			user.setEmail(updateRequest.getEmail());
 			user.setPassword(encoder.encode(updateRequest.getPassword())); // Only update if password is changed
-			sendSignUpEmail(user.getEmail(), updateRequest.getPassword(), generateQRCode(user.getId()));
+			emailUtil.sendSignUpEmail(user.getEmail(), updateRequest.getPassword(), qrCodeGenerator.generateQRCode(user.getId()));
 		}
 
 		userRepository.save(user);
@@ -180,11 +188,11 @@ public class AuthController {
 		user.setRoles(roles);
 		User saveduser =  userRepository.save(user);
 
-		// Generate QR code
-		ByteArrayOutputStream qrCodeOutputStream = generateQRCode(saveduser.getId());
+		QRCodeGenerator qrCodeGenerator = QRCodeGenerator.getInstance();
+		ByteArrayOutputStream qrCodeOutputStream = qrCodeGenerator.generateQRCode(saveduser.getId());
 
 		// Send confirmation email with password and QR code
-		sendSignUpEmail(user.getEmail(), rawPassword, qrCodeOutputStream);
+		emailUtil.sendSignUpEmail(user.getEmail(), rawPassword, qrCodeOutputStream);
 
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}
@@ -203,8 +211,8 @@ public class AuthController {
 					.body(new MessageResponse("Error: Email is already in use!"));
 		}
 
-		// Generate random password
-		String rawPassword = generateRandomPassword();
+		PasswordUtil passwordUtil = PasswordUtil.getInstance();
+		String rawPassword = passwordUtil.generateRandomPassword();
 
 
 
@@ -250,8 +258,9 @@ public class AuthController {
 
 		user.setRoles(roles);
 		User savedUser = userRepository.save(user);
-		ByteArrayOutputStream qrCodeOutputStream = generateQRCode(savedUser.getId());
-		sendSignUpEmail(savedUser.getEmail(), rawPassword, qrCodeOutputStream);
+		QRCodeGenerator qrCodeGenerator = QRCodeGenerator.getInstance();
+		ByteArrayOutputStream qrCodeOutputStream = qrCodeGenerator.generateQRCode(savedUser.getId());
+		emailUtil.sendSignUpEmail(savedUser.getEmail(), rawPassword, qrCodeOutputStream);
 
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}
@@ -320,69 +329,17 @@ public class AuthController {
 			((Doctor) user).setDepartment(signUpRequest.getDepartment());
 		}
 
-		// Save the updated user in the repository
 		User updatedUser = userRepository.save(user);
 
-		// Generate QR code for the updated user details (e.g., their unique ID)
-		ByteArrayOutputStream qrCodeOutputStream = generateQRCode(updatedUser.getId());
+		QRCodeGenerator qrCodeGenerator = QRCodeGenerator.getInstance();
+		// Generate QR code for the updated user details
+		ByteArrayOutputStream qrCodeOutputStream = qrCodeGenerator.generateQRCode(updatedUser.getId());
 
-		// Send an email with the updated user information (including the QR code)
+		// Send an email with the updated user information
 		String updatedInfo = "Your profile has been updated successfully.\n";
-		sendSignUpEmail(updatedUser.getEmail(), updatedInfo, qrCodeOutputStream);
+		emailUtil.sendSignUpEmail(updatedUser.getEmail(), updatedInfo, qrCodeOutputStream);
 
 		return ResponseEntity.ok(new MessageResponse("User updated successfully!"));
 	}
 
-
-	// Function to generate random password
-	private String generateRandomPassword() {
-		int length = 10;
-		String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%";
-		Random random = new Random();
-		StringBuilder password = new StringBuilder();
-
-		for (int i = 0; i < length; i++) {
-			password.append(chars.charAt(random.nextInt(chars.length())));
-		}
-
-		return password.toString();
-	}
-
-
-	private ByteArrayOutputStream generateQRCode(String text) throws IOException {
-		QRCodeWriter qrCodeWriter = new QRCodeWriter();
-		int width = 250;
-		int height = 250;
-		BufferedImage bufferedImage;
-		ByteArrayOutputStream pngOutputStream = new ByteArrayOutputStream();
-
-		try {
-			com.google.zxing.common.BitMatrix bitMatrix = qrCodeWriter.encode(text, BarcodeFormat.QR_CODE, width, height);
-			bufferedImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
-			ImageIO.write(bufferedImage, "PNG", pngOutputStream);
-		} catch (Exception e) {
-			throw new RuntimeException("Error occurred while generating QR code");
-		}
-
-		return pngOutputStream;
-	}
-
-	private void sendSignUpEmail(String toEmail, String rawPassword, ByteArrayOutputStream qrCodeOutputStream) throws MessagingException {
-		MimeMessage message = mailSender.createMimeMessage();
-		MimeMessageHelper helper = new MimeMessageHelper(message, true);
-
-		helper.setFrom("mithilathilochana@gmail.com");
-		helper.setTo(toEmail);
-		helper.setSubject("Welcome to the Hospital Management System");
-		helper.setText("Dear user,\n\nWelcome! Your account has been created successfully. " +
-				"Please find your login credentials and a QR code below:\n\n" +
-				"Password: " + rawPassword + "\n\n" +
-				"Scan this QR code to view your details.\n\n" +
-				"Thank you!");
-
-		// Attach QR Code
-		helper.addAttachment("QRCode.png", new ByteArrayResource(qrCodeOutputStream.toByteArray()));
-
-		mailSender.send(message);
-	}
 }
