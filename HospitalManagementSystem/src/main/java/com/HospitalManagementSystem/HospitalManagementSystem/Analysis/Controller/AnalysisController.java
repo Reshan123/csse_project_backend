@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -22,5 +23,15 @@ public class AnalysisController {
         return analysisService.getAppointmentsData();
     }
 
+    // Get data for treatments per patient
+    @GetMapping("/treatments-per-patient")
+    public Map<String, Integer> getTreatmentsPerPatient() {
+        return analysisService.getTreatmentsPerPatient();
+    }
 
+    // Get data for treatments per gender
+    @GetMapping("/treatments-per-gender")
+    public Map<String, Integer> getTreatmentsPerGender() {
+        return analysisService.getTreatmentsPerGender();
+    }
 }

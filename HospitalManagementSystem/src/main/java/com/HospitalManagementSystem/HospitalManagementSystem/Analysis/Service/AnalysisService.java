@@ -4,10 +4,13 @@ import com.HospitalManagementSystem.HospitalManagementSystem.Analysis.Model.Anal
 import com.HospitalManagementSystem.HospitalManagementSystem.Appointment.Model.Appointment;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface AnalysisService {
 
     List<Analysis> getAppointmentsData();
     List<Analysis> getMedicalRecordsData();
+    Map<String, Integer> getTreatmentsPerPatient();
+    Map<String, Integer> getTreatmentsPerGender();
 }

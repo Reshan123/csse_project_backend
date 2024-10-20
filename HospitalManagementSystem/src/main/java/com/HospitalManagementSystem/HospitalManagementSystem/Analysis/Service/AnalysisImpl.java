@@ -4,6 +4,9 @@ import com.HospitalManagementSystem.HospitalManagementSystem.Analysis.Model.Anal
 import com.HospitalManagementSystem.HospitalManagementSystem.Analysis.Repository.AnalysisRepository;
 import com.HospitalManagementSystem.HospitalManagementSystem.Appointment.Model.Appointment;
 import com.HospitalManagementSystem.HospitalManagementSystem.Appointment.Service.AppointmentService;
+import com.HospitalManagementSystem.HospitalManagementSystem.MedicalRecord.Model.MedicalRecord;
+import com.HospitalManagementSystem.HospitalManagementSystem.MedicalRecord.Model.Treatments;
+import com.HospitalManagementSystem.HospitalManagementSystem.MedicalRecord.Service.MedicalRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +17,12 @@ public class AnalysisImpl implements AnalysisService {
 
     @Autowired
     private AnalysisRepository analysisRepository;
-    private AppointmentService appointmentService;
 
+    @Autowired
+    private AppointmentService appointmentService; // Autowire appointmentService here
+
+    @Autowired
+    private MedicalRecordService medicalRecordService;
 
     @Override
     public List<Analysis> getAppointmentsData() {
@@ -55,5 +62,45 @@ public class AnalysisImpl implements AnalysisService {
     @Override
     public List<Analysis> getMedicalRecordsData() {
         return List.of();
+    }
+
+
+    // Combine data for a chart: e.g., number of treatments per patient
+    @Override
+    public Map<String, Integer> getTreatmentsPerPatient() {
+        List<MedicalRecord> medicalRecords = medicalRecordService.getAllMedicalRecords();
+        Map<String, Integer> treatmentsPerPatient = new HashMap<>();
+
+        for (MedicalRecord record : medicalRecords) {
+            // Fetch treatments for the patient directly from the medical record
+            List<Treatments> treatments = record.getTreatments();
+            int treatmentCount = treatments != null ? treatments.size() : 0;
+
+            // Use patient's full name as the key
+            String patientName = record.getFirstName() + " " + record.getLastName();
+            // If the patient name already exists, add the new treatment count to the existing one
+            treatmentsPerPatient.put(patientName, treatmentsPerPatient.getOrDefault(patientName, 0) + treatmentCount);
+        }
+
+        return treatmentsPerPatient;
+    }
+
+    // Other combinations: e.g., treatments per gender, age distribution, etc.
+    @Override
+    public Map<String, Integer> getTreatmentsPerGender() {
+        List<MedicalRecord> medicalRecords = medicalRecordService.getAllMedicalRecords();
+        Map<String, Integer> treatmentsPerGender = new HashMap<>();
+
+        for (MedicalRecord record : medicalRecords) {
+            // Fetch treatments for the patient directly from the medical record
+            List<Treatments> treatments = record.getTreatments();
+            int treatmentCount = treatments != null ? treatments.size() : 0;
+
+            // Use gender as the key and update the count
+            String gender = record.getGender().toLowerCase();
+            treatmentsPerGender.put(gender, treatmentsPerGender.getOrDefault(gender, 0) + treatmentCount);
+        }
+
+        return treatmentsPerGender;
     }
 }
